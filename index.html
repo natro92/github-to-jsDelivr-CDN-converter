@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <!--    daisyui cdn-->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.5.0/dist/full.min.css" rel="stylesheet" type="text/css"/>
+    <!--     tailwindcss cdn daisyui 前置-->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>GitHub to jsDelivr CDN Converter</title>
+    <script>
+        function convertToCDN() {
+            const githubUrl = document.getElementById("githubUrl").value;
+            let repoUrl = "";
+            let cdnUrl = "";
+            // 如果它的结尾是目录而不是文件，那么它将以斜杠结尾
+            if (githubUrl.endsWith('/')) {
+                repoUrl = githubUrl.replace('github.com', 'fastly.jsdelivr.net/gh');
+            } else {
+                // 删除多余内容
+                const urlParts = githubUrl.split("/");
+                const truncatedUrl = urlParts.slice(0, 5).join("/");
+                repoUrl = truncatedUrl.replace('github.com', 'fastly.jsdelivr.net/gh') + '/';
+                cdnUrl = githubUrl.replace('github.com', 'fastly.jsdelivr.net/gh').replace('/blob/main', '@master');
+            }
+            const textarea = document.getElementById("cdnUrl");
+            textarea.value = cdnUrl;
+            textarea.style.height = 'auto';
+            textarea.style.height = `${textarea.scrollHeight + 10}px`;
+            const repoLink = document.getElementById("repoLink");
+            repoLink.href = repoUrl;
+            const attLink = document.getElementById("attLink");
+            attLink.href = cdnUrl;
+            document.getElementById("repoTooltip").setAttribute('data-tip', repoUrl);
+            document.getElementById("attTooltip").setAttribute('data-tip', decodeURIComponent(cdnUrl.substring(cdnUrl.lastIndexOf('/') + 1)));
+        }
+    </script>
+</head>
+<body>
+<div class="w-full flex flex-col justify-center items-center">
+    <h1 class="mt-16 text-4xl font-bold font-mono">GitHub to jsDelivr CDN Converter by Natro92</h1>
+    <div class="w-9/12 flex flex-col mt-8 gap-4">
+        <label for="githubUrl" class=" text-2xl font-bold">GitHub URL:</label>
+        <input type="text" placeholder="Provide repo's URL or attachment URL." id="githubUrl" name="githubUrl"
+               class="input input-bordered w-full mt-4" value="https://github.com/natro92/github-to-jsDelivr-CDN-converter">
+        <button class="btn btn-accent" onclick="convertToCDN()">Convert to jsDelivr CDN</button>
+        <label for="cdnUrl" class=" text-2xl font-bold mt-4">jsDelivr CDN URL:</label>
+        <div class="flex flex-row justify-between items-center">
+            <div class="flex flex-row gap-2 mt-4">
+                <div class="tooltip tooltip-top" data-tip="Convert First." id="repoTooltip">
+                    <a id="repoLink" class="link link-accent" target="_blank">
+                        <div class="btn btn-accent w-full">Watch its Repo.</div>
+                    </a>
+                </div>
+                <div class="tooltip tooltip-top" data-tip="Convert First." id="attTooltip">
+                    <a id="attLink" class="link link-accent" target="_blank">
+                        <div class="btn btn-accent">Only watch attachment.</div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <textarea type="text" id="cdnUrl" name="cdnUrl" class="textarea textarea-success resize-none h-auto"
+                  placeholder="Result Here." readonly></textarea>
+        <div class="divider"></div>
+        <div class="flex flex-col justify-between items-left">
+            <h1 class=" text-2xl font-bold">Something more:</h1>
+            <ul class="">
+                <li><a href="https://github.com/natro92/github-to-jsDelivr-CDN-converter" class="link">This repo</a></li>
+                <li><a href="https://blog.natro92.fun" class="link">Natro92's Site</a></li>
+                <li><a href="https://jb.natro92.fun" class="link">Jetbra 镜像站</a></li>
+                <li><a href="https://rate.natro92.fun" class="link">Rating4All in HainanUniversity</a></li>
+            </ul>
+            <h1 class="text-2xl font-bold mt-4">Disclaimer</h1>
+            <p>Please read the following disclaimer carefully before using the Github Link Conversion Tool:</p>
+            <p>1. This tool is intended for the convenience of converting Github repository links to jsDelivr CDN links and is not an official tool. Any results generated using this tool are the sole responsibility of the user.</p>
+            <p>2. Converted jsDelivr CDN links may be subject to limitations and changes imposed by jsDelivr service. Please ensure that you understand and comply with the terms and restrictions of jsDelivr and Github.</p>
+            <p>3. This tool only provides link conversion functionality and does not review or control the content of the converted links. Users should be responsible for ensuring the validity and security of the converted links when using them.</p>
+            <p>4. The author does not assume any responsibility for any issues or losses caused by using this tool. By using this tool, you agree to assume all risks associated with it.</p>
+            <p class="font-bold mb-16">Please use this tool with caution and ensure compliance with applicable laws and regulations.</p>
+        </div>
+    </div>
+</div>
+</body>
+</html>
